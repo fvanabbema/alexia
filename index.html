@@ -1,13 +1,396 @@
-Alexia
-Scenario, Wekelijks Logboek, Bewijs & Roadmap
-Scenario
-Wekelijks Logboek
-Over
-Diagnose & Scenario's
-Ambitie (1-5)
-1 = Mooie praktijk | 5 = Groot bedrijf
-Risicobereidheid (1-5)
-1 = Laag | 5 = Hoog
-Investering (1-5)
-1 = Minimal | 5 = Fors
-Vraag Alexia om diagnose
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alexia – Scenario, Wekelijks Logboek, Bewijs & Roadmap</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #F5F6F3; color: #22302A; line-height: 1.4; }
+    .header { background: #22302A; color: white; padding: 24px 20px; text-align: center; }
+    .header h1 { font-size: 24px; margin: 8px 0; }
+    .header p { color: #C9D6CC; margin-bottom: 6px; }
+    .container { max-width: 900px; margin: 28px auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(34,48,42,0.08); }
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid #E1E7E1; }
+    .tab { padding: 10px 14px; background: none; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: #5E6B62; border-bottom: 2px solid transparent; border-radius: 6px 6px 0 0; }
+    .tab.active { color: #22302A; border-bottom-color: #C96058; background: linear-gradient(180deg,#fff,#FBFCFB); }
+    .tab-content { display: none; padding-top: 12px; }
+    .tab-content.active { display: block; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #22302A; }
+    input[type="text"], input[type="date"], textarea, input[type="file"] { width: 100%; padding: 10px 12px; border: 1px solid #E1E7E1; border-radius: 8px; font-family: inherit; font-size: 14px; background: white; color: #22302A; }
+    input[type="range"] { width: calc(100% - 68px); vertical-align: middle; }
+    .range-row { display:flex; align-items:center; gap:12px; }
+    .range-value { min-width: 40px; text-align:center; font-weight:700; color:#22302A; background:#F2F6F2; padding:6px 8px; border-radius:6px; border:1px solid #E1E7E1; }
+    textarea { resize: vertical; min-height: 120px; }
+    button.primary { padding: 12px 24px; background: #C96058; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    button.primary:hover { background: #b84f4a; }
+    button.ghost { padding: 8px 12px; background: none; border: 1px solid #E1E7E1; border-radius: 8px; cursor: pointer; color: #22302A; }
+    button.small { padding: 6px 10px; font-size: 13px; }
+    button:disabled { background: #D9988F; cursor: default; }
+    .message { padding: 14px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+    .error { background: #F4E3E0; color: #8C3A33; }
+    .success { background: #E4F0E9; color: #0F6E56; }
+    .loading { opacity: 0.6; }
+    .entry { background: #F5F6F3; padding: 14px; border-radius: 8px; margin-bottom: 12px; }
+    .entry .meta { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px; }
+    .entry .meta .left { display:flex; flex-direction:column; }
+    .entry .meta strong { color: #22302A; }
+    .controls { display:flex; gap:8px; flex-wrap:wrap; }
+    .actions-row { display:flex; gap:8px; margin-top:8px; }
+    .small-muted { color: #5E6B62; font-size:13px; }
+    .toolbar { display:flex; gap:8px; align-items:center; margin-bottom: 12px; }
+    .flex { display:flex; gap:8px; align-items:center; }
+    @media (max-width:640px){ .range-row { flex-direction:column; align-items:flex-start } .range-value { min-width: auto; } .tabs { flex-wrap:wrap; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Alexia</h1>
+    <p>Scenario, Wekelijks Logboek, Bewijs & Roadmap</p>
+  </div>
+
+  <div class="container" id="app">
+    <div class="tabs" role="tablist" aria-label="Hoofd tabs">
+      <button class="tab active" data-tab="scenario" role="tab" aria-selected="true">Scenario</button>
+      <button class="tab" data-tab="weekly" role="tab" aria-selected="false">Wekelijks Logboek</button>
+      <button class="tab" data-tab="about" role="tab" aria-selected="false">Over</button>
+    </div>
+
+    <!-- SCENARIO TAB -->
+    <div id="scenario" class="tab-content active" role="tabpanel">
+      <h2 style="margin-bottom: 12px; font-size: 18px;">Diagnose & Scenario's</h2>
+
+      <div class="form-group">
+        <label for="ambitie">Ambitie (1-5)</label>
+        <div class="range-row">
+          <input type="range" id="ambitie" min="1" max="5" value="3" aria-label="Ambitie"/>
+          <div class="range-value" id="ambitieVal" aria-hidden="true">3</div>
+        </div>
+        <div class="small-muted">1 = Mooie praktijk | 5 = Groot bedrijf</div>
+      </div>
+
+      <div class="form-group">
+        <label for="risico">Risicobereidheid (1-5)</label>
+        <div class="range-row">
+          <input type="range" id="risico" min="1" max="5" value="3" aria-label="Risicobereidheid"/>
+          <div class="range-value" id="risicoVal" aria-hidden="true">3</div>
+        </div>
+        <div class="small-muted">1 = Laag | 5 = Hoog</div>
+      </div>
+
+      <div class="form-group">
+        <label for="investering">Investering (1-5)</label>
+        <div class="range-row">
+          <input type="range" id="investering" min="1" max="5" value="3" aria-label="Investering"/>
+          <div class="range-value" id="investeringVal" aria-hidden="true">3</div>
+        </div>
+        <div class="small-muted">1 = Minimal | 5 = Fors</div>
+      </div>
+
+      <div class="actions-row">
+        <button id="generateBtn" class="primary" onclick="generateScenario()">Vraag Alexia om diagnose</button>
+        <button id="resetScenario" class="ghost small" onclick="resetScenario()">Reset</button>
+      </div>
+
+      <div id="scenarioResult" style="margin-top: 18px;" aria-live="polite"></div>
+    </div>
+
+    <!-- WEEKLY TAB -->
+    <div id="weekly" class="tab-content" role="tabpanel" aria-hidden="true">
+      <h2 style="margin-bottom: 12px; font-size: 18px;">Wekelijks Logboek</h2>
+
+      <div class="form-group">
+        <label for="weeklyDate">Datum</label>
+        <input type="date" id="weeklyDate" style="max-width: 220px;">
+      </div>
+
+      <div class="form-group">
+        <label for="weeklyThema">Thema (optioneel)</label>
+        <input type="text" id="weeklyThema" placeholder="Bijv: klantwerking, opschaling">
+      </div>
+
+      <div class="form-group">
+        <label for="weeklyNote">Notitie</label>
+        <textarea id="weeklyNote" placeholder="Wat speelt deze week? Voortgang, blockers, lessen..."></textarea>
+      </div>
+
+      <div class="actions-row">
+        <button onclick="addWeeklyEntry()" class="primary">Voeg toe aan logboek</button>
+        <button onclick="clearWeeklyLog()" class="ghost small">Wis alles</button>
+      </div>
+
+      <div class="toolbar" style="margin-top:12px;">
+        <div class="flex">
+          <button class="ghost small" onclick="exportEntries()" title="Exporteer als JSON">Export (JSON)</button>
+          <label class="ghost small" style="cursor:pointer; padding:6px 10px; border-radius:8px;">
+            Import
+            <input type="file" id="importFile" accept=".json,application/json" style="display:none" onchange="importEntries(event)">
+          </label>
+        </div>
+        <div style="margin-left:auto;" class="small-muted">Opslag: localStorage</div>
+      </div>
+
+      <div id="weeklyEntries" style="margin-top: 12px;"></div>
+    </div>
+
+    <!-- ABOUT TAB -->
+    <div id="about" class="tab-content" role="tabpanel" aria-hidden="true">
+      <h2 style="margin-bottom: 12px; font-size: 18px;">Over Alexia</h2>
+      <p style="line-height: 1.6; color: #5E6B62;">
+        Alexia helpt je een richting kiezen om de code van kwartiermaken schaalbaar te maken.
+      </p>
+      <p style="line-height: 1.6; color: #5E6B62; margin-top: 12px;">
+        <strong>Hoe het werkt:</strong><br>
+        1. Vul je voorkeuren in (Scenario tab)<br>
+        2. Noteer wekelijks wat speelt in je werk (Wekelijks Logboek)<br>
+        3. Alexia geeft feedback vanuit de kwartiermaken-code
+      </p>
+      <p style="margin-top: 12px; color: #5E6B62; font-size: 12px;">v0.9</p>
+    </div>
+  </div>
+
+  <script>
+    // --- UI: tab switching ---
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+        document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+        document.querySelectorAll('.tab-content').forEach(c => { c.classList.remove('active'); c.setAttribute('aria-hidden','true'); });
+        tab.classList.add('active'); tab.setAttribute('aria-selected','true');
+        const panel = document.getElementById(target);
+        panel.classList.add('active'); panel.setAttribute('aria-hidden','false');
+      });
+    });
+
+    // --- Helpers ---
+    function qs(id) { return document.getElementById(id); }
+    function formatDateISO(d) {
+      const dt = new Date(d);
+      return dt.toLocaleDateString('nl-NL', { year:'numeric', month:'short', day:'numeric' });
+    }
+
+    // --- Scenario: show slider values live ---
+    const sliders = ['ambitie','risico','investering'];
+    sliders.forEach(id => {
+      const el = qs(id);
+      const val = qs(id + 'Val');
+      function update() { val.textContent = el.value; }
+      el.addEventListener('input', update);
+      update();
+    });
+
+    // --- Scenario generation logic ---
+    function generateScenario() {
+      const ambitie = Number(qs('ambitie').value);
+      const risico = Number(qs('risico').value);
+      const investering = Number(qs('investering').value);
+
+      const btn = qs('generateBtn');
+      btn.disabled = true;
+      btn.textContent = 'Alexia denkt na...';
+
+      // Simple heuristic scoring: each scenario has different preference profile
+      // We'll compute fit % (0-100) based on distance to ideal profile
+      const profiles = [
+        { key: 'boutique', name: 'Scenario A: De boutique', ideal: {amb:2, ris:1, inv:1}, desc: 'Klein, voorzichtig beginnen. Laag risico; geschikt voor kleinschalige experimenten.' },
+        { key: 'private', name: 'Scenario B: Private vliegwiel', ideal: {amb:5, ris:4, inv:5}, desc: 'Groter, zet in op versnelling en opschaling. Meer investering en risico.' },
+        { key: 'publiek', name: 'Scenario C: Publieke fundament', ideal: {amb:3, ris:3, inv:3}, desc: 'Evenwichtige aanpak. Focus op robuustheid en brede adoptie.' }
+      ];
+
+      function fitFor(profile) {
+        // smaller distance -> higher fit
+        const d = Math.abs(ambitie - profile.ideal.amb) + Math.abs(risico - profile.ideal.ris) + Math.abs(investering - profile.ideal.inv);
+        const maxD = (5-1)*3; // max possible distance = 12
+        const score = Math.round((1 - (d / maxD)) * 100);
+        return Math.max(0, Math.min(100, score));
+      }
+
+      const results = profiles.map(p => ({ ...p, fit: fitFor(p) }))
+                              .sort((a,b) => b.fit - a.fit);
+
+      // Build HTML
+      let html = `<div class="message success"><strong>✓ Alexia stelt voor:</strong><br><br>`;
+      results.forEach((r, i) => {
+        html += `<strong style="font-size:15px">${r.name}</strong> <span style="color:#5E6B62;">(fit ${r.fit})</span><br>`;
+        html += `<span class="small-muted">${r.desc}</span><br><br>`;
+      });
+
+      const best = results[0];
+      html += `<div style="margin-top:8px; padding:10px; border-radius:8px; background:#FFF9F8; border:1px solid #F1D6D4;">
+        <strong>Aanbeveling:</strong> ${best.name.split(':')[1].trim()} — ${best.desc} <br>
+        <em>Waarom:</em> Dit scenario past het meest bij jouw mix van ambitie (${ambitie}), risico (${risico}) en investering (${investering}).</div>`;
+
+      html += `</div>`;
+
+      // Show the result
+      qs('scenarioResult').innerHTML = html;
+      qs('scenarioResult').scrollIntoView({behavior:'smooth', block:'center'});
+
+      // Reset button state
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Vraag Alexia om diagnose';
+      }, 600);
+    }
+
+    function resetScenario() {
+      qs('ambitie').value = 3; qs('risico').value = 3; qs('investering').value = 3;
+      sliders.forEach(id => qs(id + 'Val').textContent = qs(id).value);
+      qs('scenarioResult').innerHTML = '';
+    }
+
+    // --- Weekly log: storage + rendering ---
+    const STORAGE_KEY = 'alexia_weekly_log_v1';
+
+    function loadEntries() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return [];
+        return JSON.parse(raw);
+      } catch (e) {
+        console.error('Fout bij laden entries', e);
+        return [];
+      }
+    }
+
+    function saveEntries(entries) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    }
+
+    function renderEntries() {
+      const container = qs('weeklyEntries');
+      const entries = loadEntries().slice().reverse(); // show newest first
+      container.innerHTML = '';
+      if (!entries.length) {
+        container.innerHTML = `<div class="small-muted">Nog geen notities. Voeg iets toe via het formulier hierboven.</div>`;
+        return;
+      }
+      entries.forEach(e => {
+        const div = document.createElement('div');
+        div.className = 'entry';
+        div.innerHTML = `
+          <div class="meta">
+            <div class="left">
+              <strong>${formatDateISO(e.date)}</strong>
+              ${e.thema ? `<span class="small-muted" style="margin-top:4px;">${escapeHtml(e.thema)}</span>` : ''}
+            </div>
+            <div class="controls">
+              <button class="ghost small" onclick="editEntry('${e.id}')">Bewerk</button>
+              <button class="ghost small" onclick="deleteEntry('${e.id}')">Verwijderen</button>
+            </div>
+          </div>
+          <div><p style="margin:0; white-space:pre-wrap;">${escapeHtml(e.note)}</p></div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function addWeeklyEntry() {
+      const date = qs('weeklyDate').value || new Date().toISOString().slice(0,10);
+      const thema = qs('weeklyThema').value.trim();
+      const note = qs('weeklyNote').value.trim();
+      if (!note) { alert('Vul een notitie in'); return; }
+
+      const entries = loadEntries();
+      const id = Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+      entries.push({ id, date, thema, note });
+      saveEntries(entries);
+      renderEntries();
+
+      // Clear form
+      qs('weeklyThema').value = '';
+      qs('weeklyNote').value = '';
+      qs('weeklyDate').valueAsDate = new Date();
+    }
+
+    function deleteEntry(id) {
+      if (!confirm('Weet je zeker dat je deze notitie wilt verwijderen?')) return;
+      let entries = loadEntries();
+      entries = entries.filter(e => e.id !== id);
+      saveEntries(entries);
+      renderEntries();
+    }
+
+    function editEntry(id) {
+      const entries = loadEntries();
+      const e = entries.find(x => x.id === id);
+      if (!e) return alert('Entry niet gevonden');
+      // Pre-fill fields and delete the old entry (we'll add when saved)
+      qs('weeklyDate').value = e.date;
+      qs('weeklyThema').value = e.thema;
+      qs('weeklyNote').value = e.note;
+      deleteEntry(id);
+      // Focus note
+      qs('weeklyNote').focus();
+    }
+
+    function clearWeeklyLog() {
+      if (!confirm('Weet je zeker dat je het hele logboek wilt wissen? Deze actie is onomkeerbaar.')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      renderEntries();
+    }
+
+    // Export / Import
+    function exportEntries() {
+      const entries = loadEntries();
+      const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `alexia-weekly-${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function importEntries(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function() {
+        try {
+          const parsed = JSON.parse(reader.result);
+          if (!Array.isArray(parsed)) throw new Error('Verwacht een array van entries');
+          // Merge while avoiding duplicate ids
+          const existing = loadEntries();
+          const existingIds = new Set(existing.map(x => x.id));
+          const merged = existing.slice();
+          parsed.forEach(entry => {
+            if (!entry.id) entry.id = Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+            if (!existingIds.has(entry.id)) merged.push(entry);
+          });
+          saveEntries(merged);
+          renderEntries();
+          alert('Import voltooid');
+        } catch (err) {
+          console.error(err);
+          alert('Kon bestand niet importeren: ' + (err.message || err));
+        }
+      };
+      reader.readAsText(file);
+      // clear input so same file can be reselected later
+      e.target.value = '';
+    }
+
+    // Small HTML escaping to avoid injection when inserting notes
+    function escapeHtml(s) {
+      if (!s) return '';
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    // --- Init ---
+    (function init() {
+      // set today's date
+      qs('weeklyDate').valueAsDate = new Date();
+      renderEntries();
+      // ensure slider values shown
+      sliders.forEach(id => qs(id + 'Val').textContent = qs(id).value);
+    })();
+  </script>
+</body>
+</html>
