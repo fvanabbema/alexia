@@ -168,7 +168,15 @@
         3. Track je sales deals (Sales Pijplijn)<br>
         4. Alexia geeft feedback vanuit de kwartiermaken-code
       </p>
-      <p style="margin-top: 12px; color: #5E6B62; font-size: 12px;">v0.8</p>
+
+      <div style="margin-top: 24px; padding: 16px; background: #F5F6F3; border-radius: 8px;">
+        <h3 style="font-size: 14px; margin-bottom: 12px;">Notion API Token</h3>
+        <p style="font-size: 13px; color: #5E6B62; margin-bottom: 12px;">Je token is opgeslagen in je browser. Je kunt het hier wijzigen.</p>
+        <button onclick="changeNotionToken()" style="width: 100%; padding: 10px; background: #C96058; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">Token wijzigen</button>
+        <button onclick="clearNotionToken()" style="width: 100%; padding: 10px; margin-top: 8px; background: transparent; color: #C96058; border: 1px solid #C96058; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">Token wissen</button>
+      </div>
+
+      <p style="margin-top: 24px; color: #5E6B62; font-size: 12px;">v0.8</p>
     </div>
   </div>
 
@@ -335,6 +343,24 @@
     function removeDeal(id) {
       salesDeals = salesDeals.filter(d => d.id !== id);
       renderSalesPipeline();
+    }
+
+    // Token management
+    function changeNotionToken() {
+      const newToken = prompt('Voer je nieuwe Notion API token in (begint met "ntn_"):');
+      if (newToken) {
+        localStorage.setItem('notion_token', newToken);
+        alert('Token opgeslagen! Refresh de pagina om het te testen.');
+        location.reload();
+      }
+    }
+
+    function clearNotionToken() {
+      if (confirm('Zeker dat je het token wilt wissen?')) {
+        localStorage.removeItem('notion_token');
+        alert('Token gewist! Refresh de pagina.');
+        location.reload();
+      }
     }
   </script>
 </body>
